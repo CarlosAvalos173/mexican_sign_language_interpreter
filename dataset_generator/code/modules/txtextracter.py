@@ -261,8 +261,25 @@ def unique_values(list_a: list, list_b: list) -> set:
     a = set(list_a)
     b = set(list_b)
 
-    return a - b
+    return (a - b)
 
+def getParent(path, levels):
+    common = path
+ 
+    # Using for loop for getting
+    # starting point required for
+    # os.path.relpath()
+    for i in range(levels + 1):
+ 
+        # Starting point
+        common = os.path.dirname(common)
+ 
+    # Parent directory upto specified
+    # level
+    return os.path.relpath(path, common)
+ 
+
+    
 
 def record_video() -> None:
     """Record a video and show the wireframe overlay"""
@@ -277,14 +294,16 @@ def record_video() -> None:
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    available_directories = get_ready_words(f"dataset_generator/videos/")
 
-    for i in unique_values(word_bank, get_ready_words("dataset_generator/videos/")):
-        os.mkdir(f"dataset_generator/videos/{i}")
-    available_directories = get_ready_words("dataset_generator/videos/")
+    available_directories = get_ready_words("../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/")
+
+    for i in unique_values(word_bank, available_directories):
+        os.mkdir("../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/"+i)
+    available_directories = get_ready_words("../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/")
     folder = available_directories[index]
 
-    available_words = get_ready_words(f"dataset_generator/videos/{folder}/")
+    print(available_directories)
+    available_words = get_ready_words(f"../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/{folder}/")
 
     iteration = len(available_words) + 1
 
@@ -343,13 +362,14 @@ def record_video() -> None:
                         frame = 0
                         begin = False
                         out.release()
-                        if iteration == len(available_words) + 11:
+                        print(len(available_words))
+                        if iteration == len(available_words) + 10:
+                            index += 1
                             folder = available_directories[index]
                             available_words = get_ready_words(
-                                f"dataset_generator/videos/{folder}/"
+                                f"../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/{folder}/"
                             )
                             iteration = len(available_words)
-                            index += 1
                         iteration += 1
                         print("Finished Recording")
 
@@ -357,8 +377,9 @@ def record_video() -> None:
                 if cv2.waitKey(5) & 0xFF == ord("a"):
                     if begin == False:
                         begin = True
+                        print(f"Recording {word}{iteration}")
                         out = cv2.VideoWriter(
-                            f"dataset_generator/videos/{folder}/{word}{iteration}.avi",
+                            f"../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/{available_directories[index]}/{word}{iteration}.avi",
                             cv2.VideoWriter_fourcc(*"DIVX"),
                             12,
                             (width, height),

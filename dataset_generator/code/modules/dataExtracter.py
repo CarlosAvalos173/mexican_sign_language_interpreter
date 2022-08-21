@@ -65,24 +65,24 @@ def calculate_middle_finger_distance(list_of_points: np.array) -> np.array:
 def prepare_workspace(folders: list[str]) -> None:
     import shutil
 
-    shutil.rmtree("../../DatasetOriginal/data")
+    shutil.rmtree("../../LSM/mexican_sign_language_interpreter/dataset_generator/dataset")
 
     import os
 
-    os.mkdir("../../DatasetOriginal/data")
+    os.mkdir("../../LSM/mexican_sign_language_interpreter/dataset_generator/dataset")
     for letter in folders:
-        os.mkdir("../../DatasetOriginal/data/" + letter)
+        os.mkdir("../../LSM/mexican_sign_language_interpreter/dataset_generator/dataset/" + letter)
 
 
 def main():
 
-    letters = os.listdir("../../DatasetOriginal/Hands/")
+    letters = os.listdir("../../LSM/mexican_sign_language_interpreter/dataset_generator/original_dataset/Hands")
     for letter in letters:
         for iteration in range(
-            1, len(os.listdir("../../DatasetOriginal/Hands/" + letter))
+            1, len(os.listdir("../../LSM/mexican_sign_language_interpreter/dataset_generator/original_dataset/Hands/" + letter))
         ):
             raw_data = pd.read_csv(
-                "../../DatasetOriginal/Hands/"
+                ".../../LSM/mexican_sign_language_interpreter/dataset_generator/original_dataset/Hands/"
                 + letter
                 + "/"
                 + letter
@@ -225,10 +225,10 @@ def extract_from_video():
 
     mp_holistic = mp.solutions.holistic
 
-    for place in os.listdir("dataset_generator/videos/"):
+    for place in os.listdir("../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/"):
 
-        for videos in os.listdir(f"dataset_generator/videos/{place}"):
-            cap = cv2.VideoCapture(f"dataset_generator/videos/{place}/{videos}")
+        for videos in os.listdir(f"../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/{place}"):
+            cap = cv2.VideoCapture(f"../../LSM/mexican_sign_language_interpreter/dataset_generator/videos/{place}/{videos}")
             # set framerate to 12
             cap.set(cv2.CAP_PROP_FPS, framerate)
 
@@ -340,7 +340,7 @@ def extract_from_video():
 
                             print("Owo")
                             with open(
-                                f"../../DatasetOriginal/data/{place}/{videos}.csv",
+                                f"../../LSM/mexican_sign_language_interpreter/dataset_generator/dataset/{place}/{videos}.csv",
                                 "w",
                             ) as f:
                                 for i in range(len(data_l)):
